@@ -7,6 +7,7 @@ const thoughtSchema = new Schema({
     type: String,
     required: true,
     minlength: 1,
+    maxLength: 280,
   },
   createdAt: {
     type: Date,
@@ -16,7 +17,7 @@ const thoughtSchema = new Schema({
     type: String,
     required: true,
   },
-//   reactions: [reactionSchema],
+  //   reactions: [reactionSchema],
 });
 
 // Virtual to retrieve the amount of reactions

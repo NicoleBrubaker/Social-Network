@@ -1,6 +1,7 @@
 const User = require("../models/User");
 
 module.exports = {
+  // Get all users
   async getUsers(req, res) {
     try {
       const users = await User.find();
@@ -10,6 +11,7 @@ module.exports = {
     }
   },
 
+  // Get single user
   async getSingleUser(req, res) {
     try {
       const user = await User.findOne({ _id: req.params.userId });
@@ -24,7 +26,7 @@ module.exports = {
     }
   },
 
-  // create a new user
+  // Create new user
   async createUser(req, res) {
     try {
       const dbUserData = await User.create(req.body);
@@ -33,5 +35,37 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  
+
+  // Update existing user
+  async updateSingleUser(req, res) {
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $set: req.body },
+        { runValidators: true, new: true }
+      );
+
+      res.json(user);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  },
+
+  // Delete user
+  async deleteSingleUser(req, res) {
+    try {
+      const user = await User.findOneAndRemove({
+        _id: req.params.userId,
+      });
+
+      if (!user) {
+        return res.status(404).json({ message: "No thought with this id!" });
+      }
+
+      res.json({ message: "User deleted!" });
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
 };
