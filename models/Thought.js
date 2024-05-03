@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-// const reactionSchema = require('./Reaction.js')
+const reactionSchema = require('./Reaction')
 
 // Schema to create Thought model
 const thoughtSchema = new Schema({
@@ -17,7 +17,12 @@ const thoughtSchema = new Schema({
     type: String,
     required: true,
   },
-  //   reactions: [reactionSchema],
+  reaction: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Reaction",
+    },
+  ],
 });
 
 // Virtual to retrieve the amount of reactions

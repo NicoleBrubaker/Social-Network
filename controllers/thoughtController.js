@@ -1,4 +1,4 @@
-const { Thought, User } = require("../models");
+const { Thought, User, Reaction } = require("../models");
 
 module.exports = {
   async getThoughts(req, res) {
@@ -25,8 +25,8 @@ module.exports = {
   async createThought(req, res) {
     try {
       const thought = await Thought.create(req.body);
-      const user = await User.findOneAndUpdate(
-        { _id: req.body.userId },
+      const user = await User.findByIdAndUpdate(
+        req.body.userId,
         { $addToSet: { thoughts: thought._id } },
         { new: true }
       );
@@ -61,11 +61,12 @@ module.exports = {
         _id: req.params.thoughtId,
       });
 
-      const user = await User.findOneAndUpdate(
-        { thoughts: req.params.thoughtId },
-        { $pull: { thoughts: req.params.thoughtId } },
-        { new: true }
-      );
+       const user = await User.findByIdAndUpdate(
+         req.body.userId,
+         { $pull: { thoughts: req.params.thoughtId } },
+         { new: true }
+       );
+
 
       res.json({ message: "Thought deleted!" });
     } catch (err) {
